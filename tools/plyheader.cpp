@@ -1,5 +1,7 @@
 #include <fstream>
 #include <iostream>
+#include <cstring>
+#include <cstdlib>
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
