@@ -1,0 +1,8 @@
+<package>
+    <description brief="Library for the PLY file format">
+	A modern C++ library for parsing the PLY file format.
+    </description>
+    <author>Ares Lagae/ares.lagae@cs.kuleuven.be</author>
+    <license>GPL v2 or later</license>
+</package>
+
