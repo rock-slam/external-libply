@@ -5,5 +5,7 @@
     <author>Ares Lagae/ares.lagae@cs.kuleuven.be</author>
     <url>http://www.cs.kuleuven.ac.be/~ares/libply/</url>
     <license>GPL v2 or later</license>
+
+    <rosdep name="autoconf-archive" />
 </package>
 
