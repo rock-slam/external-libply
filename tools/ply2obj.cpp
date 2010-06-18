@@ -28,9 +28,9 @@ private:
   template <typename ScalarType> std::tr1::function<void (ScalarType)> scalar_property_definition_callback(const std::string& element_name, const std::string& property_name);
   template <typename SizeType, typename ScalarType> std::tr1::tuple<std::tr1::function<void (SizeType)>, std::tr1::function<void (ScalarType)>, std::tr1::function<void ()> > list_property_definition_callback(const std::string& element_name, const std::string& property_name);
   void vertex_begin();
-  void vertex_x(ply::float32 x);
-  void vertex_y(ply::float32 y);
-  void vertex_z(ply::float32 z);
+  template <typename ScalarType> void vertex_x(ScalarType x);
+  template <typename ScalarType> void vertex_y(ScalarType y);
+  template <typename ScalarType> void vertex_z(ScalarType z);
   void vertex_end();
   void face_begin();
   void face_vertex_indices_begin(ply::uint8 size);
@@ -82,18 +82,18 @@ std::tr1::tuple<std::tr1::function<void()>, std::tr1::function<void()> > ply_to_
   }
 }
 
-template <>
-std::tr1::function<void (ply::float32)> ply_to_obj_converter::scalar_property_definition_callback(const std::string& element_name, const std::string& property_name)
+template <typename ScalarType>
+std::tr1::function<void (ScalarType)> ply_to_obj_converter::scalar_property_definition_callback(const std::string& element_name, const std::string& property_name)
 {
   if (element_name == "vertex") {
     if (property_name == "x") {
-      return std::tr1::bind(&ply_to_obj_converter::vertex_x, this, _1);
+      return std::tr1::bind(&ply_to_obj_converter::vertex_x<ScalarType>, this, _1);
     }
     else if (property_name == "y") {
-      return std::tr1::bind(&ply_to_obj_converter::vertex_y, this, _1);
+      return std::tr1::bind(&ply_to_obj_converter::vertex_y<ScalarType>, this, _1);
     }
     else if (property_name == "z") {
-      return std::tr1::bind(&ply_to_obj_converter::vertex_z, this, _1);
+      return std::tr1::bind(&ply_to_obj_converter::vertex_z<ScalarType>, this, _1);
     }
     else {
       return 0;
@@ -107,7 +107,7 @@ std::tr1::function<void (ply::float32)> ply_to_obj_converter::scalar_property_de
 template <>
 std::tr1::tuple<std::tr1::function<void (ply::uint8)>, std::tr1::function<void (ply::int32)>, std::tr1::function<void ()> > ply_to_obj_converter::list_property_definition_callback(const std::string& element_name, const std::string& property_name)
 {
-  if ((element_name == "face") && (property_name == "vertex_indices")) {
+  if ((element_name == "face") && ((property_name == "vertex_indices") || (property_name == "vertex_index")) ) {
     return std::tr1::tuple<std::tr1::function<void (ply::uint8)>, std::tr1::function<void (ply::int32)>, std::tr1::function<void ()> >(
       std::tr1::bind(&ply_to_obj_converter::face_vertex_indices_begin, this, _1),
       std::tr1::bind(&ply_to_obj_converter::face_vertex_indices_element, this, _1),
@@ -123,17 +123,17 @@ void ply_to_obj_converter::vertex_begin()
 {
 }
 
-void ply_to_obj_converter::vertex_x(ply::float32 x)
+template <typename ScalarType> void ply_to_obj_converter::vertex_x(ScalarType x)
 {
   vertex_x_ = x;
 }
 
-void ply_to_obj_converter::vertex_y(ply::float32 y)
+template <typename ScalarType> void ply_to_obj_converter::vertex_y(ScalarType y)
 {
   vertex_y_ = y;
 }
 
-void ply_to_obj_converter::vertex_z(ply::float32 z)
+template <typename ScalarType> void ply_to_obj_converter::vertex_z(ScalarType z)
 {
   vertex_z_ = z;
 }
@@ -199,6 +199,7 @@ bool ply_to_obj_converter::convert(std::istream& istream, const std::string& ist
 
   ply::ply_parser::scalar_property_definition_callbacks_type scalar_property_definition_callbacks;
   ply::at<ply::float32>(scalar_property_definition_callbacks) = std::tr1::bind(&ply_to_obj_converter::scalar_property_definition_callback<ply::float32>, this, _1, _2);
+  ply::at<ply::float64>(scalar_property_definition_callbacks) = std::tr1::bind(&ply_to_obj_converter::scalar_property_definition_callback<ply::float64>, this, _1, _2);
   ply_parser.scalar_property_definition_callbacks(scalar_property_definition_callbacks);
 
   ply::ply_parser::list_property_definition_callbacks_type list_property_definition_callbacks;
