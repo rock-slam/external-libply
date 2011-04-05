@@ -245,7 +245,7 @@ bool ply_to_ply_converter::convert(std::istream& istream, std::ostream& ostream)
   ply_parser.format_callback(std::tr1::bind(&ply_to_ply_converter::format_callback, this, _1, _2));
   ply_parser.element_definition_callback(std::tr1::bind(&ply_to_ply_converter::element_definition_callback, this, _1, _2));
 
-  ply::ply_parser::scalar_property_definition_callbacks_type scalar_property_definition_callbacks;
+  ply::callback_types::scalar_property_definition_callbacks_type scalar_property_definition_callbacks;
 
   ply::at<ply::int8>(scalar_property_definition_callbacks) = std::tr1::bind(&ply_to_ply_converter::scalar_property_definition_callback<ply::int8>, this, _1, _2);
   ply::at<ply::int16>(scalar_property_definition_callbacks) = std::tr1::bind(&ply_to_ply_converter::scalar_property_definition_callback<ply::int16>, this, _1, _2);
@@ -258,7 +258,7 @@ bool ply_to_ply_converter::convert(std::istream& istream, std::ostream& ostream)
 
   ply_parser.scalar_property_definition_callbacks(scalar_property_definition_callbacks);
 
-  ply::ply_parser::list_property_definition_callbacks_type list_property_definition_callbacks;
+  ply::callback_types::list_property_definition_callbacks_type list_property_definition_callbacks;
 
   ply::at<ply::uint8, ply::int8>(list_property_definition_callbacks) = std::tr1::bind(&ply_to_ply_converter::list_property_definition_callback<ply::uint8, ply::int8>, this, _1, _2);
   ply::at<ply::uint8, ply::int16>(list_property_definition_callbacks) = std::tr1::bind(&ply_to_ply_converter::list_property_definition_callback<ply::uint8, ply::int16>, this, _1, _2);
