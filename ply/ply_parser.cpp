@@ -17,13 +17,13 @@ bool ply::ply_parser::parse(std::istream& istream)
   ++line_number_;
   if (!istream) {
     if (error_callback_) {
-      error_callback_(line_number_, "parse error");
+      error_callback_(line_number_, "parse error. could not read magic.");
     }
     return false;
   }
   if ((magic[0] != 'p') || (magic[1] != 'l') || (magic[2] != 'y')){
     if (error_callback_) {
-      error_callback_(line_number_, "parse error");
+      error_callback_(line_number_, "parse error. wrong magic.");
     }
     return false;
   }
@@ -53,7 +53,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         stringstream >> space_format_format_string >> std::ws >> format_string >> space_format_string_version >> std::ws >> version >> std::ws;
         if (!stringstream || !stringstream.eof() || !std::isspace(space_format_format_string) || !std::isspace(space_format_string_version)) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. expected whitespace.");
           }
           return false;
         }
@@ -68,7 +68,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         }
         else {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. wrong format.");
           }
           return false;
         }
@@ -80,7 +80,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         }
         if (number_of_format_statements > 0) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. not enough format statements.");
           }
           return false;
         }
@@ -98,7 +98,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         stringstream >> space_element_name >> std::ws >> name >> space_name_count >> std::ws >> count >> std::ws;
         if (!stringstream || !stringstream.eof() || !std::isspace(space_element_name) || !std::isspace(space_name_count)) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. expected whitespace.");
           }
           return false;
         }
@@ -111,7 +111,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         }
         if (iterator != elements.end()) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. wrong element name.");
           }
           return false;
         }
@@ -132,7 +132,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         stringstream >> space_property_type_or_list >> std::ws >> type_or_list;
         if (!stringstream || !std::isspace(space_property_type_or_list)) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. expected whitespace.");
           }
           return false;
         }
@@ -143,13 +143,13 @@ bool ply::ply_parser::parse(std::istream& istream)
           stringstream >> space_type_name >> std::ws >> name >> std::ws;
           if (!stringstream || !std::isspace(space_type_name)) {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. expected whitespace.");
             }
             return false;
           }
           if (number_of_element_statements == 0) {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. number of elements statements is 0.");
             }
             return false;
           }
@@ -162,7 +162,7 @@ bool ply::ply_parser::parse(std::istream& istream)
           }
           if (iterator != current_element_->properties.end()) {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. wrong property.");
             }
             return false;
           }
@@ -192,7 +192,7 @@ bool ply::ply_parser::parse(std::istream& istream)
           }
           else {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. undefined type.");
             }
             return false;
           }
@@ -205,13 +205,13 @@ bool ply::ply_parser::parse(std::istream& istream)
           stringstream >> space_list_size_type >> std::ws >> size_type_string >> space_size_type_scalar_type >> std::ws >> scalar_type_string >> space_scalar_type_name >> std::ws >> name >> std::ws;
           if (!stringstream || !std::isspace(space_list_size_type) || !std::isspace(space_size_type_scalar_type) || !std::isspace(space_scalar_type_name)) {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. expected whitespace.");
             }
             return false;
           }
           if (number_of_element_statements == 0) {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. number of elements statements is 0.");
             }
             return false;
           }
@@ -224,7 +224,7 @@ bool ply::ply_parser::parse(std::istream& istream)
           }
           if (iterator != current_element_->properties.end()) {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. wrong property.");
             }
             return false;
           }
@@ -256,7 +256,7 @@ bool ply::ply_parser::parse(std::istream& istream)
             }
             else {
               if (error_callback_) {
-                error_callback_(line_number_, "parse error");
+                error_callback_(line_number_, "parse error. bad type specifier.");
               }
               return false;
             }
@@ -289,7 +289,7 @@ bool ply::ply_parser::parse(std::istream& istream)
             }
             else {
               if (error_callback_) {
-                error_callback_(line_number_, "parse error");
+                error_callback_(line_number_, "parse error. bad type specifier.");
               }
               return false;
             }
@@ -322,14 +322,14 @@ bool ply::ply_parser::parse(std::istream& istream)
             }
             else {
               if (error_callback_) {
-                error_callback_(line_number_, "parse error");
+                error_callback_(line_number_, "parse error. bad type specifier.");
               }
               return false;
             }
           }
           else {
             if (error_callback_) {
-              error_callback_(line_number_, "parse error");
+              error_callback_(line_number_, "parse error. bad type specifier.");
             }
             return false;
           }
@@ -375,7 +375,7 @@ bool ply::ply_parser::parse(std::istream& istream)
 
   if (number_of_format_statements == 0) {
     if (error_callback_) {
-      error_callback_(line_number_, "parse error");
+      error_callback_(line_number_, "parse error. missing format statements.");
     }
     return false;
   }
@@ -390,7 +390,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         }
         if (!std::getline(istream, line)) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. could not read line.");
           }
           return false;
         }
@@ -406,7 +406,7 @@ bool ply::ply_parser::parse(std::istream& istream)
         }
         if (!stringstream.eof()) {
           if (error_callback_) {
-            error_callback_(line_number_, "parse error");
+            error_callback_(line_number_, "parse error. expected eof.");
           }
           return false;
         }
@@ -418,7 +418,7 @@ bool ply::ply_parser::parse(std::istream& istream)
     istream >> std::ws;
     if (istream.fail() || !istream.eof() || istream.bad()) {
       if (error_callback_) {
-        error_callback_(line_number_, "parse error");
+        error_callback_(line_number_, "parse error. could not read next character.");
       }
       return false;
     }
@@ -446,7 +446,7 @@ bool ply::ply_parser::parse(std::istream& istream)
     }
     if (istream.fail() || (istream.rdbuf()->sgetc() != std::char_traits<char>::eof()) || istream.bad()) {
       if (error_callback_) {
-        error_callback_(line_number_, "parse error");
+        error_callback_(line_number_, "parse error. expected eof.");
       }
       return false;
     }

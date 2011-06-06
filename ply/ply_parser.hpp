@@ -400,7 +400,7 @@ inline bool ply::ply_parser::parse_scalar_property(format_type format, std::istr
     }
     if (!istream || !std::isspace(space)) {
       if (error_callback_) {
-        error_callback_(line_number_, "parse error");
+        error_callback_(line_number_, "parse error. expected white space.");
       }
       return false;
     }
@@ -414,7 +414,7 @@ inline bool ply::ply_parser::parse_scalar_property(format_type format, std::istr
     istream.read(reinterpret_cast<char*>(&value), sizeof(scalar_type));
     if (!istream) {
       if (error_callback_) {
-        error_callback_(line_number_, "parse error");
+        error_callback_(line_number_, "parse error. could not read scalar.");
       }
       return false;
     }
@@ -443,7 +443,7 @@ inline bool ply::ply_parser::parse_list_property(format_type format, std::istrea
     }
     if (!istream || !std::isspace(space)) {
       if (error_callback_) {
-        error_callback_(line_number_, "parse error");
+        error_callback_(line_number_, "parse error. expecting whitespace.");
       }
       return false;
     }
@@ -459,7 +459,7 @@ inline bool ply::ply_parser::parse_list_property(format_type format, std::istrea
       }
       if (!istream || !std::isspace(space)) {
         if (error_callback_) {
-          error_callback_(line_number_, "parse error");
+          error_callback_(line_number_, "parse error. expecting whitespace.");
         }
         return false;
       }
@@ -480,7 +480,7 @@ inline bool ply::ply_parser::parse_list_property(format_type format, std::istrea
     }
     if (!istream) {
       if (error_callback_) {
-        error_callback_(line_number_, "parse error");
+        error_callback_(line_number_, "parse error. could not read size of list.");
       }
       return false;
     }
@@ -492,7 +492,7 @@ inline bool ply::ply_parser::parse_list_property(format_type format, std::istrea
       istream.read(reinterpret_cast<char*>(&value), sizeof(scalar_type));
       if (!istream) {
         if (error_callback_) {
-          error_callback_(line_number_, "parse error");
+          error_callback_(line_number_, "parse error. could not read scalar for list.");
         }
         return false;
       }
