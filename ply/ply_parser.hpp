@@ -29,17 +29,17 @@ namespace ply {
     {
       typedef std::tr1::function<void (ScalarType)> type;
     };
-  
+
     template <typename ScalarType>
     struct scalar_property_definition_callback_type
     {
       typedef typename scalar_property_callback_type<ScalarType>::type scalar_property_callback_type;
       typedef std::tr1::function<scalar_property_callback_type (const std::string&, const std::string&)> type;
     };
-  
+
     typedef boost::mpl::vector<int8, int16, int32, uint8, uint16, uint32, float32, float64> scalar_types;
     typedef boost::mpl::vector<uint8, uint16, uint32> size_types;
-  
+
     class scalar_property_definition_callbacks_type
     {
     private:
@@ -69,35 +69,41 @@ namespace ply {
         return static_cast<callbacks_element<ScalarType>&>(callbacks_).callback;
       }
       template <typename ScalarType>
-      friend typename scalar_property_definition_callback_type<ScalarType>::type& at(scalar_property_definition_callbacks_type& scalar_property_definition_callbacks)
-      {
-        return scalar_property_definition_callbacks.get<ScalarType>();
-      }
+      friend typename scalar_property_definition_callback_type<ScalarType>::type& at(scalar_property_definition_callbacks_type& scalar_property_definition_callbacks);
+
       template <typename ScalarType>
-      friend const typename scalar_property_definition_callback_type<ScalarType>::type& at(const scalar_property_definition_callbacks_type& scalar_property_definition_callbacks)
-      {
-        return scalar_property_definition_callbacks.get<ScalarType>();
-      }
+      friend const typename scalar_property_definition_callback_type<ScalarType>::type& at(const scalar_property_definition_callbacks_type& scalar_property_definition_callbacks);
     };
-  
+
+    template <typename ScalarType>
+    typename scalar_property_definition_callback_type<ScalarType>::type& at(scalar_property_definition_callbacks_type& scalar_property_definition_callbacks)
+    {
+      return scalar_property_definition_callbacks.get<ScalarType>();
+    }
+    template <typename ScalarType>
+    const typename scalar_property_definition_callback_type<ScalarType>::type& at(const scalar_property_definition_callbacks_type& scalar_property_definition_callbacks)
+    {
+      return scalar_property_definition_callbacks.get<ScalarType>();
+    }
+
     template <typename SizeType, typename ScalarType>
     struct list_property_begin_callback_type
     {
       typedef std::tr1::function<void (SizeType)> type;
     };
-  
+
     template <typename SizeType, typename ScalarType>
     struct list_property_element_callback_type
     {
       typedef std::tr1::function<void (ScalarType)> type;
     };
-  
+
     template <typename SizeType, typename ScalarType>
     struct list_property_end_callback_type
     {
       typedef std::tr1::function<void ()> type;
     };
-  
+
     template <typename SizeType, typename ScalarType>
     struct list_property_definition_callback_type
     {
@@ -158,22 +164,28 @@ namespace ply {
         return static_cast<const callback_types::callbacks_element<boost::mpl::pair<SizeType, ScalarType> >&>(callbacks_).callback;
       }
       template <typename SizeType, typename ScalarType>
-      friend typename callback_types::list_property_definition_callback_type<SizeType, ScalarType>::type& at(list_property_definition_callbacks_type& list_property_definition_callbacks)
-      {
-        return list_property_definition_callbacks.get<SizeType, ScalarType>();
-      }
+      friend typename callback_types::list_property_definition_callback_type<SizeType, ScalarType>::type& at(list_property_definition_callbacks_type& list_property_definition_callbacks);
+
       template <typename SizeType, typename ScalarType>
-      friend const typename callback_types::list_property_definition_callback_type<SizeType, ScalarType>::type& at(const list_property_definition_callbacks_type& list_property_definition_callbacks)
-      {
-        return list_property_definition_callbacks.get<SizeType, ScalarType>();
-      }
+      friend const typename callback_types::list_property_definition_callback_type<SizeType, ScalarType>::type& at(const list_property_definition_callbacks_type& list_property_definition_callbacks);
     };
+
+    template <typename SizeType, typename ScalarType>
+    typename callback_types::list_property_definition_callback_type<SizeType, ScalarType>::type& at(list_property_definition_callbacks_type& list_property_definition_callbacks)
+    {
+      return list_property_definition_callbacks.get<SizeType, ScalarType>();
+    }
+    template <typename SizeType, typename ScalarType>
+    const typename callback_types::list_property_definition_callback_type<SizeType, ScalarType>::type& at(const list_property_definition_callbacks_type& list_property_definition_callbacks)
+    {
+      return list_property_definition_callbacks.get<SizeType, ScalarType>();
+    }
   }
 
   using namespace callback_types;
 
 class ply_parser
-{ 
+{
 public:
 
   typedef std::tr1::function<void (std::size_t, const std::string&)> info_callback_type;
